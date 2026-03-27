@@ -93,7 +93,7 @@ def create_seal_image(text, font_path, padding):
 
 # --- Streamlit 介面 ---
 st.set_page_config(page_title="專業印章產生器", layout="centered")
-st.title("🪭 UNI專業印章產生器 (全功能穩定版)")
+st.title("🪭 UNI專業印章產生器")
 
 padding = st.sidebar.slider("邊距微調", 0, 50, 10)
 # 預設改成王小明
