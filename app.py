@@ -88,7 +88,7 @@ def create_seal_image(text, font_path, padding):
 
 # --- Streamlit 介面 ---
 st.set_page_config(page_title="UNI-印章產生器", layout="centered")
-st.title("🪭 「頂天立地」印章產生器")
+st.title("🪭 「UNI」印章產生器")
 
 # 側邊欄只留一個 Padding 調整
 padding = st.sidebar.slider("邊距微調 (控制字體離邊框多遠)", 0, 50, 10)
