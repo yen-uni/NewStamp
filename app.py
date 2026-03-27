@@ -80,7 +80,7 @@ st.title("🪭 專業版印章產生器")
 user_input = st.text_input("輸入名字 (1~4個字)", "廖玉銘")
 
 # 這裡請確認你的字體檔名 (font.ttf 或 標楷體.ttf)
-target_font = "font.ttf" 
+target_font = "標楷體.ttf" 
 
 if user_input:
     seal_img = create_seal_image(
