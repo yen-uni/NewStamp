@@ -17,6 +17,7 @@ def draw_stretched_text(text, font_path, box, fill_color):
     target_h = y2 - y1
     if target_w <= 0 or target_h <= 0: return None
     
+    # 在臨時畫布畫出超大文字
     temp_img = Image.new('RGBA', (800, 800), (0, 0, 0, 0))
     temp_draw = ImageDraw.Draw(temp_img)
     try:
@@ -26,10 +27,12 @@ def draw_stretched_text(text, font_path, box, fill_color):
         
     temp_draw.text((400, 400), text, font=temp_font, fill=fill_color, anchor="mm")
     
+    # 裁切像素邊界
     bbox = temp_img.getbbox()
     if not bbox: return None
     char_img = temp_img.crop(bbox)
     
+    # 拉伸至目標尺寸
     char_img = char_img.resize((target_w, target_h), Image.Resampling.LANCZOS)
     return char_img
 
@@ -50,11 +53,16 @@ def create_seal_image(text, font_path, padding):
         layout_boxes.append((text[0], (inner_start, inner_start, inner_end, inner_end)))
 
     elif len(text) == 2:
-        # --- 關鍵修正：兩字改為直式 (上姓, 下名) ---
-        # 上方字：寬度全開 (inner_start 到 inner_end)，高度佔上半部
-        layout_boxes.append((text[0], (inner_start, inner_start, inner_end, mid)))
-        # 下方字：寬度全開 (inner_start 到 inner_end)，高度佔下半部
-        layout_boxes.append((text[1], (inner_start, mid, inner_end, inner_end)))
+        # --- 核心修正：二字窄化、直式、置中 ---
+        # 定義中間一條狹窄的欄位 (這裡設為總寬度的 1/2)
+        char_w = mid - inner_start
+        left_quarter = mid - (char_w // 2)
+        right_quarter = mid + (char_w // 2)
+        
+        # 上方字 (姓) - 垂直平分，水平窄框
+        layout_boxes.append((text[0], (left_quarter, inner_start, right_quarter, mid)))
+        # 下方字 (名) - 垂直平分，水平窄框
+        layout_boxes.append((text[1], (left_quarter, mid, right_quarter, inner_end)))
 
     elif len(text) == 3:
         # 三字：右姓 (全高), 左名1 (上半), 左名2 (下半)
@@ -76,6 +84,7 @@ def create_seal_image(text, font_path, padding):
         if char_img:
             img.paste(char_img, (box[0], box[1]), char_img)
 
+    # 最後畫框
     draw = ImageDraw.Draw(img)
     draw.rectangle([BORDER_WIDTH//2, BORDER_WIDTH//2, IMG_SIZE-BORDER_WIDTH//2, IMG_SIZE-BORDER_WIDTH//2], 
                    outline=RED_COLOR, width=BORDER_WIDTH)
@@ -83,12 +92,14 @@ def create_seal_image(text, font_path, padding):
     return img
 
 # --- Streamlit 介面 ---
-st.set_page_config(page_title="印章產生器", layout="centered")
-st.title("🪭 正統印章產生器")
+st.set_page_config(page_title="專業印章產生器", layout="centered")
+st.title("🪭 專業印章產生器 (全功能穩定版)")
 
 padding = st.sidebar.slider("邊距微調", 0, 50, 10)
-user_input = st.text_input("輸入名字 (預設：王小明)", "王小明")
+# 預設改成王小明
+user_input = st.text_input("輸入名字 (如：王小明)", "王小明")
 
+# 確認你的字體檔名為 font.ttf
 target_font = "標楷體.ttf" 
 
 if user_input:
