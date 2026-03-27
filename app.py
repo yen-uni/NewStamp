@@ -93,7 +93,7 @@ st.title("🪭 「UNI」印章產生器")
 # 側邊欄只留一個 Padding 調整
 padding = st.sidebar.slider("邊距微調 (控制字體離邊框多遠)", 0, 50, 10)
 
-user_input = st.text_input("輸入名字 (如：廖玉銘)", "廖玉銘")
+user_input = st.text_input("輸入名字 (如：陳環久)", "陳環久")
 target_font = "標楷體.ttf" # 請確認你的檔名
 
 if user_input:
