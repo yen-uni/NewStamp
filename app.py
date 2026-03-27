@@ -50,12 +50,12 @@ def create_seal_image(text, font_path, padding):
 
     # --- 處理三字排版 ---
     if len(text) == 3:
-        # 右側：姓氏 (廖) -> 佔據 1/2 寬度，1/1 高度
+        # 右側：姓氏 (王) -> 佔據 1/2 寬度，1/1 高度
         s_box = (mid, inner_start, inner_end, inner_end)
         char_s = draw_stretched_text(None, text[0], font_path, s_box, RED_COLOR)
         if char_s: img.paste(char_s, (s_box[0], s_box[1]), char_s)
 
-        # 左側：名字 (玉銘) -> 垂直平分
+        # 左側：名字 (小銘) -> 垂直平分
         # 左上 (名1)
         n1_box = (inner_start, inner_start, mid, mid)
         char_n1 = draw_stretched_text(None, text[1], font_path, n1_box, RED_COLOR)
